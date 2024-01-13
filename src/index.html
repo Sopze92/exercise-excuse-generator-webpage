@@ -3,26 +3,66 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello Rigo with Vanilla.js</title>
+    <title>Excuse Generator 9000</title>
+    <link rel="shortcut icon" href="./4geeks.ico" />
+    <link rel="stylesheet" href="./styles.css" />
     <link
       rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
-      integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
-      crossorigin="anonymous"
+      href="https://fonts.googleapis.com/css2?family=Tektur:wght@800&family=Caveat:wght@400&family=Rubik:wght@400"
     />
-    <link rel="shortcut icon" href="./4geeks.ico" />
   </head>
-  <body>
-    <div class="container-fluid text-center">
-      <h1 class="mt-5">Hello Rigo!</h1>
-      <img src="./rigo-baby.jpg" />
-      <p class="alert alert-warning mt-4">
-        If this text is <b>not</b> centered and <b>yellow</b>, you probably have
-        an error
-      </p>
-      <div class="fixed-bottom p-4">
-        Made with ❤️ by
-        <a href="https://www.4geeksacademy.com">4Geeks Academy</a>
+  <body class="darkmode">
+    <div class="eg-header">
+      <div class="egh-title">
+        <h1 class="localizable" data-localize="0"></h1>
+      </div>
+      <div class="egh-buttonbox">
+        <button class="egh-lightbtn" id="el_lightbtn"></button>
+        <button class="egh-langbtn" id="el_langbtn"></button>
+        <div class="egh-langmenu hidden" id="el_langmenu">
+          <div class="egh-langselbtn" data-language="0"></div>
+          <div class="egh-langselbtn" data-language="1"></div>
+        </div>
+      </div>
+    </div>
+    <div class="eg-pagecontent">
+      <div class="egc-startupcontainer ">
+        <button
+          class="egc-startbtn localizable"
+          id="el_startbtn"
+          data-localize="4"
+        ></button>
+      </div>
+      <div class="egc-excusescontainer hidden" id="el_container">
+        <div class="egc-title">
+          <h1 class="localizable" data-localize="3"></h1>
+        </div>
+        <div class="egc-excuse" id="el_excuse">
+          <span class="loc_ex0"></span>
+          <span class="loc_ex1"></span>
+          <span class="loc_ex2"></span>
+          <span class="loc_ex3"></span>
+        </div>
+        <div class="egc-buttonbox">
+          <button
+            class="egh-genbtn localizable"
+            id="el_genbtn"
+            data-localize="4"
+          ></button>
+          <button
+            class="egh-copybtn localizable"
+            id="el_copybtn"
+            data-localize="5"
+          ></button>
+        </div>
+        <div id="el_oldexcuses">
+      </div>
+    </div>
+    <div class="eg-footer">
+      <div class="egf-content">
+        <span class="egf-author">Sergio del Pino Arroyo</span>
+        <span class="egf-date localizable" data-localize="1"></span>
+        <span class="egf-aknowledges localizable" data-localize="2"></span>
       </div>
     </div>
   </body>
