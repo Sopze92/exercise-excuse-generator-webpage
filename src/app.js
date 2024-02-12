@@ -2,456 +2,235 @@
 import "bootstrap";
 import "./styles.css";
 
-const el_body = document.getElementsByTagName("body")[0];
-const el_excuse = document.getElementById("el_excuse");
-const el_oldexcuses = document.getElementById("el_oldexcuses");
+/*
+ * Original plan was to use an API to get user's location to retrieve user zone's news from another API, then build excuses from those news' data
+ * I've spent a weekend just searching any free 'news' or 'web search' APIs that satisfied my needs with no success... so I did something else (using APIs as well)
+ * 
+ * There is a lot of unneeded and overcomplicated code that I wrote just because I wanted to actually test and 
+ * use as many JS lang features as I could just to get used to this language
+ * 
+ * every var name is verbosed to make understanding this a little easier (just a tiny little haha ò-ó)
+*/
 
-const el_lightbtn = document.getElementById("el_lightbtn");
-const el_langbtn = document.getElementById("el_langbtn");
-const el_langmenu = document.getElementById("el_langmenu");
-const el_startbtn = document.getElementById("el_startbtn");
-const el_genbtn = document.getElementById("el_genbtn");
-const el_copybtn = document.getElementById("el_copybtn");
+import { countryName } from "./util/countrycodes.js"; // [third party] used for getting country names from ISO 3166 country codes (if needed)
 
-const el_localizables = document.getElementsByClassName("localizable");
+window.onload= function() {
 
-const Language0 = {
-  data: [
-    "Excuse Generator 9000",
-    "January 12th, 2024",
-    "Thanks to Lucía Belén for all the knowledge she brought to me.",
-    "Generated excuse:",
-    "Generate!",
-    "Copy to Clipboard"
-  ],
-  excuses: [
-    [
-      "My dog",
-      "My cat",
-      "My aunt",
-      "My sister",
-      "My brother",
-      "My friend",
-      "My parraket",
-      "My mother",
-      "My father",
-      "My cousin",
-      "My grandpa",
-      "My grandma",
-      "My boss",
-      "My dealer",
-      "My lawyer",
-      "A penguin",
-      "A hamster",
-      "A scorpion",
-      "A triceratops",
-      "A wolf",
-      "A dodo",
-      "A crocodile",
-      "A movie director",
-      "A flat earther",
-      "A deer",
-      "A panda",
-      "A bear",
-      "A bunny",
-      "A carnivorous plant",
-      "A police officer",
-      "A FBI agent",
-      "A spy",
-      "A ninja",
-      "A tourist",
-      "A serial killer",
-      "An insane random guy",
-      "A magician",
-      "An elf",
-      "Lucía Belén"
-    ],
-    [
-      "eat",
-      "burnt",
-      "licked",
-      "threw",
-      "jailed",
-      "broke",
-      "sent to space",
-      "set in orbit",
-      "ran away with",
-      "punched",
-      "magically made dissapear",
-      "was hunting",
-      "did hide",
-      "took away",
-      "married",
-      "killed",
-      "petted",
-      "sold",
-      "hang out with",
-      "went on vacation with",
-      "was flying with",
-      "fell over the trees",
-      "sat on",
-      "blindly galloped",
-      "divorced",
-      "broke up with",
-      "sank",
-      "threw to the sea",
-      "buried",
-      "yelled at",
-      "offended",
-      "sued",
-      "went to trial with",
-      "wrote the memories of",
-      "jumped out of a plane with",
-      "went on a cruise with",
-      "made a film of"
-    ],
-    [
-      "my homework",
-      "my assignment",
-      "my task",
-      "my will to work",
-      "my hands",
-      "my conscience",
-      "all my spoons",
-      "my clothes",
-      "my underwear",
-      "my favorite comb",
-      "the house keys",
-      "my phone",
-      "the router",
-      "the water bill",
-      "the logbook",
-      "the black box",
-      "my magic pen",
-      "my nail clipper",
-      "my car",
-      "my pet",
-      "my credit card",
-      "my money",
-      "my computer",
-      "my happiness",
-      "your house",
-      "my house",
-      "your children",
-      "all my children",
-      "my salary",
-      "the TV remote",
-      "the instructions",
-      "my sigth"
-    ],
-    [
-      "this morning.",
-      "last night.",
-      "yesterday.",
-      "a week ago.",
-      "forever.",
-      "right now.",
-      "two days ago.",
-      "on christmas eve.",
-      "on my birthday.",
-      "in my wedding's day.",
-      "in the burial.",
-      "while I was sleeping.",
-      "in the hospital.",
-      "from the top of a tree.",
-      "riding a scooter.",
-      "during the earthquake."
-    ]
-  ]
-};
+  const 
+      RAPIDAPI_BOOTCAMP_KEY=    "7894adc0eamshee9b2505ce8cec9p12f536jsnb94eb1ba69b3",
+      HEADER_JSON=              {accept: 'application/json'},
+      HEADER_RAPIDAPI=          {"X-RapidAPI-Key": RAPIDAPI_BOOTCAMP_KEY, "X-RapidAPI-Host":undefined}; // host is later set
 
-const Language1 = {
-  data: [
-    "Generador de Excusas 9000",
-    "12 Enero 2024",
-    "Gracias a Lucía Belén por todos el conocimiento que me ha traido.",
-    "Excusa generada:",
-    "Generar!",
-    "Copiar al portapapeles"
-  ],
-  excuses: [
-    [
-      "mi perro",
-      "mi gato",
-      "mi tia",
-      "mi hermana",
-      "mi hermano",
-      "mi amigo",
-      "mi periquito",
-      "mi madre",
-      "mi padre",
-      "mi primo",
-      "mi abuelo",
-      "mi abuela",
-      "mi jefe",
-      "mi camello",
-      "mi abogado",
-      "un pingüino",
-      "Un hamster",
-      "Un escorpión",
-      "Un triceratops",
-      "Un lobo",
-      "Un dodo",
-      "Un cocodrilo",
-      "Un director de cine",
-      "Un terraplanista",
-      "un ciervo",
-      "un panda",
-      "un oso",
-      "un conejo",
-      "una planta carnivora",
-      "un policia",
-      "un agente del fbi",
-      "un espia",
-      "un ninja",
-      "un turista",
-      "un asesino en serie",
-      "un hombre loco",
-      "un mago",
-      "un elfo",
-      "Lucía Belén"
-    ],
-    [
-      "se comió",
-      "quemó",
-      "lamió",
-      "lanzó",
-      "encarceló",
-      "rompió",
-      "envió al espacio",
-      "puso en orbita",
-      "huyó con",
-      "golpeó",
-      "hizo desaparecer magicamente",
-      "estaba cazando",
-      "escondió",
-      "se llevó",
-      "se casó con",
-      "mató",
-      "acarició",
-      "vendió",
-      "salió con",
-      "se fue de vacaciones con",
-      "voló con",
-      "cayó en la arbolada",
-      "se sentó en",
-      "cabalgó ciegamente",
-      "se divorció de",
-      "rompió con",
-      "inhundó",
-      "lanzó al mar",
-      "enterró",
-      "le gritó a",
-      "ofendió a",
-      "demandó a",
-      "fué a jucio con",
-      "escribió las memorias de",
-      "saltó de un avión con",
-      "se fue de crucero con",
-      "hizo una película de"
-    ],
-    [
-      "mis deberes",
-      "mi tarea",
-      "mi trabajo",
-      "mis ganas de trabajar",
-      "mis manos",
-      "mi consciencia",
-      "todas mis cucharas",
-      "mi ropa",
-      "mis calzones",
-      "mi peine favorito",
-      "las llaves de casa",
-      "mi telefono",
-      "el router",
-      "la factura del agua",
-      "el cuaderno de bitacora",
-      "la caja negra",
-      "mi boligrafo mágico",
-      "mi cortauñas",
-      "mi coche",
-      "mi mascota",
-      "mi tarjeta de crédito",
-      "mi dinero",
-      "mi ordenador",
-      "mi felicidad",
-      "tu casa",
-      "mi casa",
-      "tus hijos",
-      "todos mis hijos",
-      "mi salario",
-      "el mando de la tele",
-      "las instrucciones",
-      "mi vista"
-    ],
-    [
-      "esta mañana.",
-      "anoche.",
-      "ayer.",
-      "hace una semana.",
-      "para siempre.",
-      "justo ahora.",
-      "anteayer.",
-      "la víspera de navidad.",
-      "en mi cumpleaños.",
-      "el dia de mi boda.",
-      "en el velatorio.",
-      "mientras dormía.",
-      "en el hospital.",
-      "subido a un árbol.",
-      "montando en patineta.",
-      "durante el terremoto."
-    ]
-  ]
-};
+  // Utils
+  // NOTE: min/max are just here to have a faster version of Math ones as they don't create and iterate
+  //    through an array of its args, but is limited only to get min/max of 2 vars
+  function clamp(n,min,max) {return n<min?min:n>max?max:n};
+  function min(a,b) {return b<a?b:a};
+  function max(a,b) {return a>b?a:b};
+  function randomRange(min,max) {return Math.floor(min + Math.random()*(max-min))}; // max exclusive
+  function firstWord(str) {return str.replace(/ .*/,'')};
 
-const page_languages = [Language0, Language1];
-
-var blangmenu = false;
-var bdarkmode;
-var langindex;
-
-var excuseslength = [0, 0, 0, 0];
-
-window.onload = function() {
-  // update darkmode initial state
-  let lbdarkmode = el_body.classList.contains("darkmode");
-  if (lbdarkmode) {
-    el_body.classList.remove("darkmode");
-  } else {
-    el_body.classList.add("darkmode");
-  }
-  setDarkmode(lbdarkmode);
-
-  // ensure lang menu is hidden
-  el_langmenu.classList.add("hidden");
-
-  // update lang
-  setLanguage(0);
-
-  // get excuse part sizes
-  for (let i = 0; i < 4; i++) {
-    excuseslength[i] = Language0.excuses[i].length;
-  }
-};
-
-document.addEventListener("click", function(el) {
-  let ltarget = el.target;
-
-  if (ltarget === el_startbtn) {
-    // big start button
-    el_startbtn.parentElement.remove();
-    el_container.classList.remove("hidden");
-    generateExcuse(false);
-  } else if (ltarget === el_genbtn) {
-    // generate button
-    generateExcuse(true);
-  } else if (ltarget === el_copybtn) {
-    // copy to clipboard button
-    navigator.clipboard.writeText(getExcuseStr());
-  } else if (ltarget === el_lightbtn) {
-    // darkmode button
-    setDarkmode(!bdarkmode);
-  } else if (!blangmenu && ltarget === el_langbtn) {
-    // language menu button
-    el_langmenu.classList.toggle("hidden"); // show lang menu
-    blangmenu = !blangmenu;
-    return;
-  } else if (ltarget.classList.contains("egh-langselbtn")) {
-    // language selection buttons
-    setLanguage(Number(ltarget.dataset.language));
-    return;
-  }
-
-  // hide lang menu if open
-  if (blangmenu) {
-    el_langmenu.classList.add("hidden");
-    blangmenu = false;
-  }
-});
-
-// set language
-function setLanguage(index) {
-  if (index > -1 && index < 2) {
-    for (const element of el_localizables) {
-      element.innerHTML =
-        page_languages[index].data[Number(element.dataset.localize)];
-    }
-    updateExcuseLanguage(index);
-    langindex = index;
-  } else setLanguage(0); // set lang 0 if index isn't valid
-}
-
-function generateExcuse(keep) {
-  if (keep) {
-    let lexcuse = document.createElement("div");
-    let lexcusepart;
-    lexcuse.classList.add("egc-excuse");
-    lexcuse.style.opacity = 1.0;
-    for (let i = 0; i < 4; i++) {
-      lexcusepart = el_excuse.children[i].cloneNode(true);
-      lexcuse.append(lexcusepart);
+  // API object
+  class ApiData {
+    constructor(pUrl, pOptions, pCustomParser= undefined){
+        this.url= pUrl;
+        this.options= pOptions;
+        this.customParser= pCustomParser;
+        // get url parts that are enclosed between %( and )%
+        let ms= pUrl.match(/%\((.*?)\)%/g);
+        this.params= ms ? ms.map(m => m.slice(2, -2)) : undefined; 
+        // setup rapidapi host value
+        if(pOptions.hasOwnProperty("X-RapidAPI-Host")) this.options["X-RapidAPI-Host"]= new URL(this.url).host;
     }
 
-    if (el_oldexcuses.children.length > 0) {
-      for (const item of el_oldexcuses.children) {
-        let lalpha = Number(item.style.opacity);
-
-        console.log(lalpha);
-
-        if (lalpha < 0.15) item.remove();
-        else item.style.opacity = lalpha - 0.1;
+    // cannot make this private because eslint, and I dont wanna mess with eslint :/
+    generateParamValue(idx){
+      this.parsedParams= {};
+      switch(this.params[idx]){
+        case "Y": 
+          let y= randomRange(ApiData.YEAR_RANGES[0], ApiData.YEAR_RANGES[1]+1);
+          this.parsedParams["Y"]= y;
+          return y;
+        case "M/D": 
+          let m = randomRange(0, 12);
+          let d = randomRange(0, new Date(1972, m, 0).getDate()); // 1972 is first leap year for computer's date systems so we can ask API about feb 29
+          this.parsedParams["M"]= m;
+          this.parsedParams["D"]= d;
+          return `${m+1}/${d+1}`;
       }
     }
 
-    el_oldexcuses.prepend(lexcuse);
-  }
+    // do the fetch and autoparse
+    async fetchApi() {
+      let nurl= this.url;
 
-  for (let i = 0; i < 4; i++) {
-    el_excuse.children[i].dataset.localize = Math.floor(
-      Math.random() * excuseslength[i]
-    );
-  }
-  updateExcuseLanguage(langindex);
-}
+      if(this.params) for(var i=0; i< this.params.length; i++) nurl= nurl.replace(`%(${this.params[i]})%`, this.generateParamValue(i));
 
-// update language of excuse(s)
-// getting elements at runtime here is avoidable but i didnt wanted to make this bigger
-function updateExcuseLanguage(index) {
-  for (let i = 0; i < 4; i++) {
-    let lelements = document.getElementsByClassName("loc_ex" + i);
-    for (const element of lelements) {
-      element.innerHTML =
-        page_languages[index].excuses[i][Number(element.dataset.localize)];
+      let r = await fetch(nurl, { method: "GET", headers: this.options })
+      if(r.ok){ 
+        let json= await r.json();
+        return this.customParser ? this.customParser(this, json) : json; 
+      }
+      else throw new Error(`[${this.url}] ERR: ${r.status}`);
     }
   }
-}
+  ApiData.YEAR_RANGES= [1950, new Date().getFullYear()];
+  ApiData.MONTH_NAMES= ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  ApiData.GEN_OFFSET= 2;
 
-// get the excuse in a single string
-function getExcuseStr() {
-  let resultstr = "";
-  for (let i = 0; i < 4; i++) {
-    resultstr += el_excuse.children[i].innerHTML + (i == 3 ? "" : " ");
+  const excuseWho=[
+    "I", "You", "My father", "Your father", "My sister", "My dog", "The neightbor's dog", "Some random guy", "A policeman on my door", "Seems like you", "My alter-ego", "Obama", "The creator of the universe", "God", "Miguel Martin", "Gabriel Yañez", "An hominid"
+  ]
+
+  const excuseAction=[
+    "should", "wanna", "was ordered to", "may be", "might be", "must", "can't", "will", "will be", "want to be"
+  ]
+
+  // fast way of making a custom probability of choosing each api
+  const excuseWeights= [0,0,0,1,1,2,2,2,2,2,2];
+
+  const apis=[
+
+      // Get user's IP data + location, pretty accurate for a free one (planned for news API query, ended up being used just for greetings)
+      new ApiData("https://ipapi.co/json", HEADER_JSON ),
+
+      // Check if given word is a name
+      new ApiData("https://check-name.herokuapp.com/verify/%0%", HEADER_JSON ),
+
+      // [ https://rapidapi.com/divad12/api/numbers-1/ ] -- Education -> Numbers @ divad12
+      // An API for interesting facts about numbers. Provides trivia, math, date, and year facts about number
+      new ApiData("https://numbersapi.p.rapidapi.com/%(Y)%/year?json=true&fragment=true", {...HEADER_JSON, ...HEADER_RAPIDAPI}, function(instance, json){
+        
+        // this is UGLY, I just wanted to get this done
+        if(!json.found) return ["I was about to tell you an excuse...","But I'm pretty out of your stupid abuse! DROP THE MIC"];
+        let response= [
+          "Say you couldn't do it because...",
+          `the year ${json.number} ${json.text}`
+        ];
+        if(json.date) response[1]= `on ${json.date} of ${response[1]}`;
+        else response[1]= `in ${response[1]}`;
+        return response;
+      } ),
+      new ApiData("https://numbersapi.p.rapidapi.com/%(M/D)%/date?json=true&fragment=true", {...HEADER_JSON, ...HEADER_RAPIDAPI}, function(instance, json){
+        
+        // this is UGLY, I just wanted to get this done
+        if(!json.found) return ["I was about to tell you an excuse...","But I'm pretty out of your stupid abuse! DROP THE MIC"];
+        let response= [
+          "Say you couldn't do it because...",
+          `${json.text}`
+        ];
+        if(json.year) response[1]= `on ${ApiData.MONTH_NAMES[instance.parsedParams.M]} ${instance.parsedParams.D} of the year ${json.year} ${response[1]}`;
+        else response[1]= `the ${ApiData.MONTH_NAMES[instance.parsedParams.M]} ${instance.parsedParams.D}, ${response[1]}`;
+        return response;
+      } ),
+
+      // [ https://rapidapi.com/hargrimm/api/wikihow/ ] -- Data -> WikiHow @ hargrimm
+      // Retrieve random out-of-context text and images from WikiHow articles
+      new ApiData("https://hargrimm-wikihow-v1.p.rapidapi.com/steps?count=1", HEADER_RAPIDAPI, function(instance, json){
+        return ["" , `${excuseWho[randomRange(0, excuseWho.length)]} ${excuseAction[randomRange(0, excuseAction.length)]} ${json["1"][0].toLowerCase()}${json["1"].slice(1)}`];
+      } )
+  ];
+
+  // The welcome thing
+  const elmLocation= document.getElementById("location-container");
+
+  async function initWelcomeDiv(){
+    let location="";
+    let carrier="";
+    try {
+      // location API
+      let json= await apis[0].fetchApi();
+      let c= json.city, r= json.region, cn= json.country_name;
+      if(c) location+= r ? `${c}, ${r}`:c;
+      else if(r) location+= r;
+      if(cn) location+= c||r ? ` (${cn})`:cn;
+      if(json.org) carrier= `Brought to you by ${json.org}`;
+    }
+    catch (error) { 
+      console.error(error);
+      // in case API fails, guess location from navigator.language and hope for the best xd
+      location= countryName(navigator.language.split('-')[1]);
+    }
+
+    elmLocation.children[1].innerHTML=location;
+    elmLocation.children[2].innerHTML=carrier;
+    elmLocation.classList.remove("invisible");
   }
-  return resultstr;
-}
 
-// set darkmode
-function setDarkmode(state) {
-  if (bdarkmode != state) {
-    bdarkmode = state;
-    el_body.classList.toggle("darkmode");
-    el_lightbtn.classList.remove(state ? "light" : "night");
-    el_lightbtn.classList.add(state ? "night" : "light");
+  // The welcome thing
+  const elmExcuses= document.getElementById("excuses-container");
+  const elmExcuseTemplate= document.getElementById("excuse-template");
+
+  var bWaiting= false;
+  async function generateExcuse(){
+
+    if(bWaiting) {
+      console.log("generateExcuse() => Please wait until previous excuse finishes generating");
+      return;
+    }
+
+    bWaiting= true;
+
+    let gen= apis[ApiData.GEN_OFFSET + excuseWeights[randomRange(0, excuseWeights.length)]];
+
+    try {
+      let response= await gen.fetchApi();
+      let elm= elmExcuseTemplate.content.children[0].cloneNode(true);
+      
+      // using response[1]?? gives an "unreachable" error in babel-eslint
+      elm.children[0].innerHTML= response[0];
+      elm.children[1].innerHTML= response[1];
+      
+      elmExcuses.innerHTML= "";
+      elmExcuses.append(elm);
+    }
+    catch(e){ console.error(e); }
+
+    bWaiting= false;
   }
-}
 
-// fancy effect of the generate button
-el_genbtn.addEventListener("click", function() {
-  let angy = Math.random() * 0.5 - 0.25;
-  let angz = Math.random() - 0.5;
-  el_genbtn.style.setProperty("rotate", "0 " + angy + " " + angz + " 4deg");
-  setTimeout(() => {
-    el_genbtn.style.setProperty("rotate", "0 0 0 0deg");
-  }, 125);
-});
+  // Startup
+
+  initWelcomeDiv();
+  document.getElementById("generate").addEventListener("click", ()=>{ generateExcuse(); });
+
+  /**
+   *  --------------------------------- Nothing to see down below here... is just the title's glow animation code ---------------------------------
+   */ 
+
+  const elmTitleGlow= document.getElementById("title-glow");
+  const NCHECK= -2147483648;
+
+  let boundingBox, offsetX, offsetY, objAngle, xFactor, yFactor, shadowX, shadowY, musDistRaw, objScale, shadowAlpha, shadowSpread;
+  function animateTitleGlow(musX, musY) {
+    for(const e of elmTitleGlow.children) {
+      boundingBox = e.getBoundingClientRect();
+      offsetX= musX - boundingBox.x - boundingBox.width * .5;
+      offsetY= musY - boundingBox.y - boundingBox.height * .5;
+      xFactor= offsetX * .00625;
+      yFactor= offsetY * .00625;
+      musDistRaw= xFactor*xFactor + yFactor*yFactor; // no normalized!
+      objScale= clamp(1.15 - musDistRaw * .035, 1.0, 1.15);
+      objAngle = offsetX&NCHECK ? max(4.0 - musDistRaw, .0) : min(-4.0 + musDistRaw, .0);
+      shadowAlpha= clamp(1.0 - musDistRaw * .045, .0, 1.0);
+      shadowSpread= 1.0 - (objScale-1.0) * 3;
+      shadowX = offsetX * -.0125 * objScale;
+      shadowY = offsetY * .0125 * objScale;
+
+      e.style.textShadow = `${shadowX*objScale}px ${-shadowY*objScale}px ${20-15*shadowSpread}px rgba(220,210,230,${shadowAlpha})`;
+      e.style.transform = `scale(${objScale}) rotate(${objAngle}deg)`;
+    }
+  }
+
+  let u= true;
+  document.addEventListener("mousemove", (e) => {
+    if( (u=!u) ) window.requestAnimationFrame(function () { animateTitleGlow(e.clientX, e.clientY); });
+  });
+
+  {
+    let str= elmTitleGlow.innerHTML;
+    let nstr= "";
+    for(let c of str) nstr+=`<span>${c}</span>`;
+    elmTitleGlow.innerHTML= nstr;
+  }
+};
