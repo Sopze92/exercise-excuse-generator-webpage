@@ -1,106 +1,51 @@
-/* GENERAL */
+@charset "UTF-8";
 
-.hidden { display: none !important; }
-.tooltip-inner { padding: .3em .5em; }
-
-.dng-tooltip {
-  --bs-tooltip-bg: var(--bs-success);
-  --bs-tooltip-color: var(--bs-white);
+.gen-canvas {
+  height: 100vh;
+  width: 100vw;
 }
 
-/* TITLE */
-
-.dng-title { font-size: 6em; font-variant: small-caps; }
-
-/* BADGE */
-
-.dng-tickbadge {
-  top: -10px;
-  right: 0;
-  width:64px;
-  scale: 1.0;
-  rotate: 15deg;
-  transition: all .25s;
-  opacity: 1.0;
-  &.opacity-0 {
-    top: -180px;
-    right: -200px;
-    rotate: -50deg;
-    scale: 6.0;
-  }
-  &:not(.opacity-0):hover {
-    scale: 1.1;
-    rotate: 10deg;
-  }
+#gen-form input {
+  width: 100px;
 }
 
-/* CONFIG */
-
-.dng-slider {
-  & label { width: 15%; }
-  & input { width: 75%; }
-  & span { width: 10%; }
+#gen-card {
+  position: relative;
+  min-width: var(--card-width);
+  min-height: var(--card-height);
+  width: var(--card-width);
+  height: var(--card-height);
+  border-radius: calc(var(--card-width) * .05);
+  background: #dfded4;
+  user-select: none;
+  pointer-events: none;
 }
 
-.dng-slider-extended {
-  & label { width: 25%; }
-  & input { width: 65%; }
-}
-
-.btn-group-vertical input + .dng-noungrp {
-  width: 100%;
+.gen-card-number {
+  position: absolute;
+  width: calc(var(--card-width)*.5);
+  height: calc(var(--card-width)*.5);
+  line-height: calc(var(--card-width)*.40);
+  margin: calc(var(--card-width)*-.25) 0 0 calc(var(--card-width)*-.25);
   text-align: center;
-  padding: 0.04em;
-  background: var(--bs-dark-bg-subtle);
-  border-bottom: 1px solid #444 !important;
-  letter-spacing: .2em;
-  &:hover {
-    background: var(--bs-dark);
-  }
+  vertical-align: middle;
+  top: 54%;
+  left: 50%;
+  font-size: calc(var(--card-width)*.5);
+  color: #000;
 }
 
-.btn-group-vertical input:checked + .dng-noungrp {
-  background: #365e97;
-  border-color: #36386a !important;
+.gen-card-suit {
+  position: absolute;
+  content: "";
+  width: calc(var(--card-width) * .334);
+  height: calc(var(--card-width) * .334);
+  background: var(--card-suit);
+  background-size: contain;
 }
 
-.dng-noungrp-placeholder {
-  display: flex;
-  justify-content: center;
-  padding: .675em 0;
-  margin: 0;
-  & span {
-    height: 6px !important;
-  }
-}
-
-/* RESULTS */
-
-.dng-results-panel {
-  min-height: 512px;
-}
-
-.dng-result {
-  display: flex;
-  justify-content: space-between;
-  padding: .5em 0;
-  background: none;
-  &:hover {
-    background: var(--bs-dark-bg-subtle);
-    & p {
-      text-shadow: 0 0 4px #eee;
-      letter-spacing: .2em;
-    }
-  }
-  & p {
-    transition: all .0625s;
-    margin: 0 40px;
-    font-variant: small-caps;
-    letter-spacing: .1em;
-    font-weight: 600;
-  }
-  & img {
-    width: 32px;
-    margin: -4px -8px;
-  }
+.gen-invert {
+  rotate: 180deg;
+  bottom: 0;
+  right: 0;
 }
