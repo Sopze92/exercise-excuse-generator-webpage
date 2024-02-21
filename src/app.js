@@ -19,8 +19,8 @@ window.onload= function() {
     cardNumberElement= document.getElementsByClassName("gen-card-number")[0],
     cardNameElement= document.getElementById("gen-card-name"),
 
-    cardNumbers= "23456789JQK",
-    cardNumbersName= ["two","three","four","five","six","seven","eight","nine","jack","queen","king"],
+    cardNumbers= "A23456789JQK",
+    cardNumbersName= ["ace", "two","three","four","five","six","seven","eight","nine","jack","queen","king"],
     cardSuitsName= ["clubs","diamonds","hearts","spades"];
 
   let counterID, counterTime;
